@@ -1,0 +1,50 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>XML Output</title>
+<base target="_self">
+</head>
+<body>
+
+<script>
+if(document.location == top.location) 
+{ alert("This is a sub frame of the Test Harness.  Click OK to properly start Test Harness");
+  document.location.href="Silverpop XML API - Test Harness.html";
+  }
+</script>
+
+<p><font face="Arial" size="2">
+Click the link below for supporting documentation:<br>
+<B></B><a href="xml_api_developer_guide_winter14.pdf" target="_blank">
+XML API Developer Guide</a><br>
+</font></p>
+
+<p><font face="Arial" size="2"><a name="intro"></a><b>XML API Test Harness for Recipient and
+User Actions<br>
+</b>Use this application to help build familiarity with Silverpop's XML
+API.&nbsp; The intended purpose is to allow you to see the XML of your requests
+and the subsequent responses, and allow easy experiments with the API.&nbsp; It
+is not intended to be a reference implementation of the APIs.</font></p>
+<p><font face="Arial" size="2"><a name="use"></a><b>To Use the XML API Test Harness<br>
+<a name="login"></a></b><br><b>1. Login</b><br>Some APIs require the user to be authenticated and a valid
+session established.&nbsp; This is done by selecting and executing the Login
+API, editing the XML to reflect your user account, and executing it.<br>
+If your login is successful, copy the jsession id from the response XML into the
+jsession field in the left frame.<br>
+</font></p>
+<p><font face="Arial" size="2"><a name="execute"></a><b>2. Select/Execute an API</b><br>
+To test one of the APIs, first choose the system Pod, then select the API from the API drop-down.&nbsp; This will
+populate the Host and Servlet fields for you.&nbsp; It will also populate the
+XML field with boiler plate XML for that API.<br>
+You will probably need to edit the XML so that it reflects the proper e-mail
+address, list id, mailing id, or recipient id that you are testing with.<br>
+When your XML is correct, press the <i><b>submit xml request</b></i> button.</font></p>
+<p><font face="Arial" size="2"><a name="responses"></a><b>3. View XML Responses</b><br>
+XML responses will be displayed in the lower right frame (the same one you're
+reading from right now).&nbsp; Some browsers will display the raw XML response while others will attempt to render it.  If you do not see the XML response, then right click in the response frame and select <i><b>View
+Source</b></i>.&nbsp; You can cut &amp; paste from here if needed.</font></p>
+</body>
+</html>

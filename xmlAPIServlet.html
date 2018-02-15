@@ -1,0 +1,663 @@
+<html>
+<head>
+<title>Engage XML API Test Harness - Winter '14</title>
+<base target="outputframe">
+<script>
+
+
+var openTag = '<Envelope><Body>\n';
+var closeTag = '\n</Body></Envelope>';
+
+var loginXML = openTag + '<Login>\n<USERNAME>username@domain.com</USERNAME>\n<PASSWORD>password</PASSWORD>\n</Login>' + closeTag;
+var addRecipientXML = openTag + '<AddRecipient>\n<LIST_ID>100732</LIST_ID>\n<CREATED_FROM>1</CREATED_FROM>\n<UPDATE_IF_FOUND>true</UPDATE_IF_FOUND>\n<COLUMN>\n<NAME>EMAIL</NAME>\n<VALUE>somebody@domain.com</VALUE>\n</COLUMN>\n</AddRecipient>' + closeTag;
+
+var RemoveRecipientXML = openTag + '<RemoveRecipient>\n<LIST_ID>100732</LIST_ID>\n<EMAIL>somebody@domain.com</EMAIL>\n</RemoveRecipient>' + closeTag;
+var SelectRecipientDataXML = openTag + '<SelectRecipientData>\n<LIST_ID>100732</LIST_ID>\n<EMAIL>somebody@domain.com</EMAIL>\n<COLUMN>\n<NAME>Customer Id</NAME>\n<VALUE>123-45-6789</VALUE>\n</COLUMN>\n</SelectRecipientData>' + closeTag;
+var UpdateRecipientXML = openTag + '<UpdateRecipient>\n<LIST_ID>100732</LIST_ID>\n<CREATED_FROM>2</CREATED_FROM>\n<OLD_EMAIL>somebody@domain.com</OLD_EMAIL>\n<COLUMN>\n<NAME>EMAIL</NAME>\n<VALUE>somebody@domain.com</VALUE>\n</COLUMN>\n<COLUMN>\n<NAME>Lname</NAME>\n<VALUE>Special</VALUE>\n</COLUMN>\n</UpdateRecipient>' + closeTag;
+
+var sendMailingXML = openTag + '<SendMailing>\n<MailingId>5972</MailingId>\n<RecipientEmail>jyeatman@silverpop.com</RecipientEmail>\n</SendMailing>' + closeTag;
+var ForwardToFriendXML = openTag + '<ForwardToFriend>\n<SENDER_EMAIL>powellsmith@comcast.net</SENDER_EMAIL>\n<rs>MzM0NzI2MTkS1</rs>\n<m>6133</m>\n<RECIPIENTS>somebody@domain.com</RECIPIENTS>\n<MESSAGE>Forwarded Mailing</MESSAGE>\n</ForwardToFriend>' + closeTag;
+var RecipientMailingXML = openTag + '<ListRecipientMailings>\n<LIST_ID>100732</LIST_ID>\n<RECIPIENT_ID>33439394</RECIPIENT_ID>\n</ListRecipientMailings>' + closeTag;
+var listImportXML = openTag +
+'<ImportList>\n<MAP_FILE>list_import_map.xml</MAP_FILE>\n<SOURCE_FILE>list_create.csv</SOURCE_FILE>\n</ImportList>' + closeTag;
+var listExportXML = openTag +
+'<ExportList>\n<LIST_ID>56008</LIST_ID>\n<EXPORT_TYPE>ALL</EXPORT_TYPE>\n<EXPORT_FORMAT>CSV</EXPORT_FORMAT>\n<ADD_TO_STORED_FILES/>\n<DATE_START>07/25/2003 12:12:11</DATE_START>\n<DATE_END>09/30/2005 14:14:11</DATE_END>\n</ExportList>' + closeTag;
+var jobStatusXML = openTag + '<GetJobStatus>\n<JOB_ID>28001</JOB_ID>\n</GetJobStatus>' + closeTag;
+var DeleteJobXML = openTag + '<DeleteJob>\n<JOB_ID>1427</JOB_ID>\n</DeleteJob>' + closeTag;
+var logoutXML = openTag + '<Logout/>' + closeTag;
+var OptOutRecipientXML = openTag + '<OptOutRecipient>\n<LIST_ID>100732</LIST_ID>\n<EMAIL>somebody@domain.com</EMAIL>\n</OptOutRecipient>' + closeTag;
+var TrackingMetricExportXML = openTag + '<TrackingMetricExport>\n<MAILING_ID>15167</MAILING_ID>\n<EMAIL>somebody@domain.com</EMAIL>\n<ACTION_DATE_START>01/01/2008 00:00:00</ACTION_DATE_START>\n<ACTION_DATE_END>02/01/2008 23:59:00</ACTION_DATE_END>\n<OPENS/>\n<CLICKS/>\n<OPTINS/>\n<OPTOUTS/>\n<BOUNCES/>\n<FORWARDS/>\n<MEDIA/>\n<ATTACHMENTS/>\n<CONVERSIONS/>\n<CLICKSTREAMS/>\n<SENT/>\n<RECEIVED/>\n<HARD_BOUNCES/>\n<SOFT_BOUNCES/>\n</TrackingMetricExport>' + closeTag;
+var ScheduleMailingXML = openTag + '<ScheduleMailing>\n<TEMPLATE_ID>118366</TEMPLATE_ID>\n<LIST_ID>81443</LIST_ID>\n<MAILING_NAME>API Scheduled Mailing</MAILING_NAME>\n<SEND_HTML/>\n<SEND_AOL/>\n<SEND_TEXT/>\n<SUBJECT>API Scheduled Mailing</SUBJECT>\n<FROM_NAME>API Test Harness</FROM_NAME>\n<FROM_ADDRESS>fromname@company.com</FROM_ADDRESS>\n<REPLY_TO>sender@domain.com</REPLY_TO>\n<VISIBILITY>0</VISIBILITY>\n<SCHEDULED>12/31/2005 09:00:00 AM</SCHEDULED>\n</ScheduleMailing>' + closeTag;
+var GetListMetaDataXML = openTag + '<GetListMetaData>\n<LIST_ID>108220</LIST_ID>\n</GetListMetaData>' + closeTag; 
+var GetReportIdByDateXML = openTag + '<GetReportIdByDate>\n<MAILING_ID>1</MAILING_ID>\n<DATE_START>01/01/2006 00:00:00</DATE_START>\n<DATE_END>03/09/2006 23:59:59</DATE_END>\n</GetReportIdByDate>' + closeTag;
+var GetSentMailingsForOrgXML = openTag + '<GetSentMailingsForOrg>\n<DATE_START>01/01/2006 00:00:00</DATE_START>\n<DATE_END>03/09/2006 23:59:59</DATE_END>\n<EXCLUDE_ZERO_SENT/>\n</GetSentMailingsForOrg>' + closeTag;
+var GetSentMailingsForUserXML = openTag + '<GetSentMailingsForUser>\n<DATE_START>01/01/2006 00:00:00</DATE_START>\n<DATE_END>03/09/2006 23:59:59</DATE_END>\n</GetSentMailingsForUser>' + closeTag;
+var GetAggregateTrackingForMailingXML = openTag + '<GetAggregateTrackingForMailing>\n<MAILING_ID>123</MAILING_ID>\n<REPORT_ID>12332</REPORT_ID>\n</GetAggregateTrackingForMailing>' + closeTag;
+var GetAggregateTrackingForOrgXML = openTag + '<GetAggregateTrackingForOrg>\n<DATE_START>01/01/2006 00:00:00</DATE_START>\n<DATE_END>03/09/2006 23:59:59</DATE_END>\n</GetAggregateTrackingForOrg>' + closeTag;
+var GetAggregateTrackingForUserXML = openTag + '<GetAggregateTrackingForUser>\n<DATE_START>01/01/2006 00:00:00</DATE_START>\n<DATE_END>03/09/2006 23:59:59</DATE_END>\n</GetAggregateTrackingForUser>' + closeTag;
+var ImportRecipientFieldDataXML = openTag + '<ImportRecipientFieldData>\n<LIST_ID>4425</LIST_ID>\n<COLUMN>M_DYN_STOCKS</COLUMN>\n<SOURCE_FILE>FastBucks_recipient_data.xml</SOURCE_FILE>\n<COMPLETION_EMAIL>somebody@domain.com</COMPLETION_EMAIL>\n<ERROR_EMAIL>somebody@domain.com</ERROR_EMAIL>\n</ImportRecipientFieldData>' + closeTag;
+var DoubleOptInRecipientXML = openTag + '<DoubleOptInRecipient>\n<LIST_ID>85628</LIST_ID>\n<COLUMN>\n<NAME>Customer Id</NAME>\n<VALUE>123-45-6789</VALUE>\n</COLUMN>\n<COLUMN>\n<NAME>EMAIL</NAME>\n<VALUE>somebody@domain.com</VALUE>\n</COLUMN>\n<TABLES>\n<TABLE>\n<TABLE_NAME>Purchases</TABLE_NAME>\n<TABLE_COLUMNS>\n<COLUMN>\n<NAME>Product Id</NAME>\n<VALUE>123-45-6789</VALUE>\n</COLUMN>\n<COLUMN>\n<NAME>Purchase Date</NAME>\n<VALUE>2007-12-01</VALUE>\n</COLUMN>\n</TABLE_COLUMNS>\n</TABLE>\n</TABLES>\n</DoubleOptInRecipient>' + closeTag;
+
+var GetSentMailingsForListXML = openTag + '<GetSentMailingsForList>\n<DATE_START>07/25/2007 00:00:00</DATE_START>\n<DATE_END>09/30/2007 23:59:59</DATE_END>\n<LIST_ID>27546</LIST_ID>\n<INCLUDE_CHILDREN/>\n</GetSentMailingsForList>' + closeTag;
+
+var GetListsXML = openTag + '<GetLists>\n<VISIBILITY>0</VISIBILITY>\n<LIST_TYPE>2</LIST_TYPE>\n</GetLists>' + closeTag;
+
+var ImportTableXML = openTag + '<ImportTable>\n<MAP_FILE>table_import_map.xml</MAP_FILE>\n<SOURCE_FILE>table_create.csv</SOURCE_FILE>\n</ImportTable>' + closeTag;         
+
+var JoinTableXML = openTag + '<JoinTable>\n<TABLE_NAME>Shared/Web Analytics/Purchases</TABLE_NAME>\n<LIST_ID>65745</LIST_ID>\n<MAP_FIELD>\n<LIST_FIELD>ItemId</LIST_FIELD>\n<TABLE_FIELD>Item Id</TABLE_FIELD>\n</MAP_FIELD>\n<MAP_FIELD>\n<LIST_FIELD>PurchPrice</LIST_FIELD>\n<TABLE_FIELD>Purchase Price</TABLE_FIELD>\n</MAP_FIELD>\n</JoinTable>' + closeTag; 
+
+var ExportTableXML = openTag + '<ExportTable>\n<TABLE_NAME>Shared/Web Analytics/Purchases</TABLE_NAME>\n<EXPORT_FORMAT>CSV</EXPORT_FORMAT>\n<ADD_TO_STORED_FILES/>\n<DATE_START>07/25/2007 12:12:11</DATE_START>\n<DATE_END>09/30/2007 14:14:11</DATE_END>\n</ExportTable>' + closeTag; 
+
+var DeleteTableXML = openTag + '<DeleteTable>\n<TABLE_NAME>Web Analytics Purchases</TABLE_NAME>\n<TABLE_VISIBILITY>0</TABLE_VISIBILITY>\n<EMAIL>user@silverpop.com</EMAIL>\n</DeleteTable>' + closeTag; 
+
+var CreateQueryXML = openTag + '<CreateQuery>\n<QUERY_NAME>Has_Mobile_30_Zip</QUERY_NAME>\n<PARENT_LIST_ID>17607</PARENT_LIST_ID>\n<VISIBILITY>0</VISIBILITY>\n<PARENT_FOLDER_ID>9512</PARENT_FOLDER_ID>\n<ALLOW_FIELD_CHANGE>0</ALLOW_FIELD_CHANGE>\n<SELECT_COLUMNS>Last_Name|First_Name</SELECT_COLUMNS>\n<CRITERIA>\n<TYPE>editable</TYPE>\n<EXPRESSION>\n<TYPE>TE</TYPE>\n<COLUMN_NAME>Zip</COLUMN_NAME>\n<OPERATORS><![CDATA[BETWEEN]]></OPERATORS>\n<VALUES><![CDATA[30000|30999]]></VALUES>\n<LEFT_PARENS>(</LEFT_PARENS>\n</EXPRESSION>\n<EXPRESSION>\n<AND_OR>AND</AND_OR>\n<TYPE>TE</TYPE>\n<COLUMN_NAME>Mobile</COLUMN_NAME>\n<OPERATORS><![CDATA[IS NOT null]]></OPERATORS>\n<RIGHT_PARENS>)</RIGHT_PARENS>\n</EXPRESSION>\n</CRITERIA>\n<BEHAVIOR>\n<OPTION_OPERATOR>103</OPTION_OPERATOR>\n<TYPE_OPERATOR>111</TYPE_OPERATOR>\n<MAILING_ID>669614</MAILING_ID>\n<REPORT_ID>502993</REPORT_ID>\n</BEHAVIOR>\n</CreateQuery>' + closeTag; 
+
+var RawRecipientDataExportXML = openTag + '<RawRecipientDataExport>\n<EVENT_DATE_START>01/01/2008 00:00:00</EVENT_DATE_START>\n<EVENT_DATE_END>01/31/2008 23:59:00</EVENT_DATE_END>\n<MOVE_TO_FTP/>\n<EXPORT_FORMAT>0</EXPORT_FORMAT>\n<EMAIL>admin@yourorg.com</EMAIL>\n<ALL_EVENT_TYPES/>\n<EXCLUDE_DELETED/>\n<COLUMNS>\n<COLUMN>\n<NAME>CustomerID</NAME>\n</COLUMN>\n<COLUMN>\n<NAME>Address</NAME>\n</COLUMN>\n</COLUMNS>\n</RawRecipientDataExport>' + closeTag; 
+var AddDCRulesetXML = openTag + '<AddDCRuleset>\n<LIST_ID>123456789123456789</LIST_ID>\n<MAILING_ID>123456789123456789</MAILING_ID>\n<RULESET_NAME>XYZ Corp Ruleset</RULESET_NAME>\n<CONTENT_AREAS>\n<CONTENT_AREA type="Body-HTML" name="ApparelPromotion">\n<DEFAULT_CONTENT name="Default" ><![CDATA[<p><b></b>10 Percent Off Mens and Womens Apparel</b></p>]]></DEFAULT_CONTENT>\n</CONTENT_AREA>\n<CONTENT_AREA type="Body-HTML" name="AlcoholPromotion">\n<DEFAULT_CONTENT name="Default"><![CDATA[<p><b></b>All Beer and Wine On Sale This Week</b></p>]]></DEFAULT_CONTENT>\n</CONTENT_AREA>\n</CONTENT_AREAS>\n<RULES>\n<RULE>\n<RULE_NAME>Gender</RULE_NAME>\n<PRIORITY>1</PRIORITY>\n<CRITERIA>\n<MAPPING>1 and 2</MAPPING>\n<EXPRESSION>\n<TYPE>TE</TYPE>\n<COLUMN_NAME>Gender</COLUMN_NAME>\n<OPERATORS><![CDATA[=]]></OPERATORS>\n<VALUES>M</VALUES>\n</EXPRESSION>\n<EXPRESSION>\n<TYPE>TE</TYPE>\n<COLUMN_NAME>Beer_Preference</COLUMN_NAME>\n<OPERATORS><![CDATA[IN]]></OPERATORS>\n<VALUES>SP Lager|SP Lager Light</VALUES>\n</EXPRESSION>\n</CRITERIA>\n<CONTENTS>\n<CONTENT content_area="ApparelPromotion" name="ApparelPromotion"><![CDATA[<p><b></b>20 Percent Off Mens SP Lager T-Shirts</b></p>]]></CONTENT>\n<CONTENT content_area="AlcoholPromotion" name="AlcoholPromotion"><![CDATA[<p><b></b>5 Dollars Off Cases of SP Lager Products</b></p>]]></CONTENT>\n</CONTENTS>\n</RULE>\n<RULE>\n<RULE_NAME>Salary</RULE_NAME>\n<PRIORITY>2</PRIORITY>\n<CRITERIA>\n<MAPPING>1</MAPPING>\n<EXPRESSION>\n<TYPE>NE</TYPE>\n<COLUMN_NAME>Income</COLUMN_NAME>\n<OPERATORS><![CDATA[>]]></OPERATORS>\n<VALUES>65000</VALUES>\n</EXPRESSION>\n</CRITERIA>\n<CONTENTS>\n<CONTENT content_area="ApparelPromotion" name="ApparelPromotion"><![CDATA[<p><b></b>Save on Gucci Socks Now</b></p>]]></CONTENT>\n<CONTENT content_area="AlcoholPromotion" name="AlcoholPromotion"><![CDATA[<p><b></b>Buy One Get One Free Dom Perignon</b></p>]]></CONTENT>\n</CONTENTS>\n</RULE>\n</RULES>\n</AddDCRuleset>' + closeTag;
+var DeleteDCRulesetXML = openTag + '<DeleteDCRuleset>\n<RULESET_ID>123456789</RULESET_ID>\n</DeleteDCRuleset>' + closeTag;
+var ExportDCRulesetXML = openTag + '<ExportDCRuleset>\n<RULESET_ID>123456789</RULESET_ID>\n<MOVE_TO_FTP/>\n</ExportDCRuleset>' + closeTag;
+var GetDCRulesetXML = openTag + '<GetDCRuleset>\n<RULESET_ID>123456789</RULESET_ID>\n</GetDCRuleset>' + closeTag;
+var ImportDCRulesetXML = openTag + '<ImportDCRuleset>\n<FILE_NAME>sample_import.SRS</FILE_NAME>\n<MAILING_ID>123456789</MAILING_ID>\n<LIST_ID>123456789</LIST_ID>\n</ImportDCRuleset>' + closeTag;
+var ListDCRulesetsForMailingXML = openTag + '<ListDCRulesetsForMailing>\n<MAILING_ID>123456789</MAILING_ID>\n</ListDCRulesetsForMailing>' + closeTag;
+var ReplaceDCRulesetXML = openTag + '<ReplaceDCRuleset>\n<RULESET_ID>123456</RULESET_ID>\n<CONTENT_AREAS>\n<CONTENT_AREA type="Body-HTML" name="ApparelPromotion">\n<DEFAULT_CONTENT><![CDATA[<p><b></b>10 Percent Off Mens and Womens Apparel</b></p>]]></DEFAULT_CONTENT>\n</CONTENT_AREA>\n<CONTENT_AREA type="Body-HTML" name="AlcoholPromotion">\n<DEFAULT_CONTENT><![CDATA[<p><b></b>All Beer and Wine On Sale This Week</b></p>]]></DEFAULT_CONTENT>\n</CONTENT_AREA>\n</CONTENT_AREAS>\n<RULES>\n<RULE>\n<RULE_NAME>Gender</RULE_NAME>\n<PRIORITY>1</PRIORITY>\n<CRITERIA>\n<MAPPING>1 and 2</MAPPING>\n<EXPRESSION>\n<TYPE>TE</TYPE>\n<COLUMN_NAME>Gender</COLUMN_NAME>\n<OPERATORS><![CDATA[=]]></OPERATORS>\n<VALUES>M</VALUES>\n</EXPRESSION>\n<EXPRESSION>\n<TYPE>TE</TYPE>\n<COLUMN_NAME>Beer_Preference</COLUMN_NAME>\n<OPERATORS><![CDATA[IN]]></OPERATORS>\n<VALUES>SP Lager|SP Lager Light</VALUES>\n</EXPRESSION>\n</CRITERIA>\n<CONTENTS>\n<CONTENT content_area="ApparelPromotion"><![CDATA[<p><b></b>20 Percent Off Mens SP Lager T-Shirts</b></p>]]></CONTENT>\n<CONTENT content_area="AlcoholPromotion"><![CDATA[<p><b></b>5 Dollars Off Cases of SP Lager Products</b></p>]]></CONTENT>\n</CONTENTS>\n</RULE>\n<RULE>\n<RULE_NAME>Salary</RULE_NAME>\n<PRIORITY>2</PRIORITY>\n<CRITERIA>\n<MAPPING>1</MAPPING>\n<EXPRESSION>\n<TYPE>NE</TYPE>\n<COLUMN_NAME>Income</COLUMN_NAME>\n<OPERATORS><![CDATA[>]]></OPERATORS>\n<VALUES>65000</VALUES>\n</EXPRESSION>\n</CRITERIA>\n<CONTENTS>\n<CONTENT content_area="ApparelPromotion"><![CDATA[<p><b></b>Save on Gucci Socks Now</b></p>]]></CONTENT>\n<CONTENT content_area="AlcoholPromotion"><![CDATA[<p><b></b>Buy One Get One Free Dom Perignon</b></p>]]></CONTENT>\n</CONTENTS>\n</RULE>\n</RULES>\n</ReplaceDCRuleset>' + closeTag;
+var GetMailingTemplatesXML = openTag + '<GetMailingTemplates>\n<VISIBILITY>0</VISIBILITY>\n<LAST_MODIFIED_START_DATE>01/01/2009 13:00:00 </LAST_MODIFIED_START_DATE>\n<LAST_MODIFIED_END_DATE>01/31/2009 12:59:59</LAST_MODIFIED_END_DATE>\n</GetMailingTemplates>' + closeTag;
+var ExportMailingTemplateXML = openTag + '<ExportMailingTemplate>\n<TEMPLATE_ID>59294</TEMPLATE_ID>\n<ADD_TO_STORED_FILES/>\n</ExportMailingTemplate>' + closeTag;
+var ValidateDCRulesetXML = openTag + '<ValidateDCRuleset>\n<MAILING_ID>123456789</MAILING_ID>\n</ValidateDCRuleset>' + closeTag;
+var CalculateQueryXML = openTag + '<CalculateQuery>\n<QUERY_ID>59294</QUERY_ID>\n<EMAIL>notify@silverpop.com</EMAIL>\n</CalculateQuery>' + closeTag;
+var PurgeTableXML = openTag + '<PurgeTable>\n<TABLE_NAME>Web Analytics Purchases</TABLE_NAME>\n<TABLE_VISIBILITY>0</TABLE_VISIBILITY>\n<DELETE_BEFORE>07/25/2009 12:12:11</DELETE_BEFORE>\n<EMAIL>user@silverpop.com</EMAIL>\n</PurgeTable>' + closeTag;
+var PreviewMailingXML = openTag + '<PreviewMailing>\n<MailingId>59294</MailingId>\n</PreviewMailing>' + closeTag;
+var AddContactToProgramXML = openTag + '<AddContactToProgram>\n<PROGRAM_ID>56753246</PROGRAM_ID>\n<CONTACT_ID>7657657</CONTACT_ID>\n</AddContactToProgram>' + closeTag;
+var CreateContactListXML = openTag + '<CreateContactList>\n<DATABASE_ID>565576</DATABASE_ID>\n<CONTACT_LIST_NAME>Re-marketing Contacts</CONTACT_LIST_NAME>\n<VISIBILITY>0</VISIBILITY>\n<PARENT_FOLDER_PATH>Main Folder/Sub Folder</PARENT_FOLDER_PATH>\n</CreateContactList>' + closeTag;
+var AddContactToContactListXML = openTag + '<AddContactToContactList>\n<CONTACT_LIST_ID>85628</CONTACT_LIST_ID>\n<CONTACT_ID>15674222</CONTACT_ID>\n</AddContactToContactList>' + closeTag;
+var CreateTableXML = openTag + '<CreateTable>\n<TABLE_NAME>Purchases</TABLE_NAME>\n<COLUMNS>\n<COLUMN>\n<NAME>Record Id</NAME>\n<TYPE>NUMERIC</TYPE>\n<IS_REQUIRED>true</IS_REQUIRED>\n<KEY_COLUMN>true</KEY_COLUMN>\n</COLUMN>\n<COLUMN>\n<NAME>Purchase Date</NAME>\n<TYPE>DATE</TYPE>\n<IS_REQUIRED>true</IS_REQUIRED>\n</COLUMN>\n<COLUMN>\n<NAME>Product Id</NAME>\n<TYPE>NUMERIC</TYPE>\n<IS_REQUIRED>true</IS_REQUIRED>\n</COLUMN>\n</COLUMNS>\n</CreateTable>' + closeTag;
+var InsertUpdateRelationalTableXML = openTag + '<InsertUpdateRelationalTable>\n<TABLE_ID>86767</TABLE_ID>\n<ROWS>\n<ROW>\n<COLUMN name="Record Id"><![CDATA[GHbjh73643hsdiy]]></COLUMN>\n<COLUMN name="Purchase Date"><![CDATA[01/09/1975]]></COLUMN>\n<COLUMN name="Product Id"><![CDATA[123454]]></COLUMN>\n</ROW>\n<ROW>\n<COLUMN name="Record Id"><![CDATA[WStfh73643hsdgw]]></COLUMN>\n<COLUMN name="Purchase Date"><![CDATA[02/11/1980]]></COLUMN>\n<COLUMN name="Product Id"><![CDATA[45789]]></COLUMN>\n</ROW>\n<ROW>\n<COLUMN name=" Record Id"><![CDATA[YUhbh73643hsfgh]]></COLUMN>\n<COLUMN name="Purchase Date"><![CDATA[05/10/1980]]></COLUMN>\n<COLUMN name="Product Id"><![CDATA[4766454]]></COLUMN>\n</ROW>\n</ROWS>\n</InsertUpdateRelationalTable>\n</Body>\n</Envelope>' + closeTag;
+var DeleteRelationalTableDataXML = openTag + '<DeleteRelationalTableData>\n<TABLE_ID>56753246</TABLE_ID>\n<ROWS>\n<ROW>\n<KEY_COLUMN name="Record Id"><![CDATA[GHbjh73643hsdiy]]></KEY_COLUMN>\n</ROW>\n<ROW>\n<KEY_COLUMN name="Record Id"><![CDATA[WStfh73643hsdgw]]></KEY_COLUMN>\n</ROW>\n</ROWS>\n</DeleteRelationalTableData>' + closeTag;
+var AddListColumnXML = openTag + '<AddListColumn>\n<LIST_ID>81750</LIST_ID>\n<COLUMN_NAME>FIRST_NAME</COLUMN_NAME>\n<COLUMN_TYPE>0</COLUMN_TYPE>\n<DEFAULT>Yes</DEFAULT>\n</AddListColumn>' + closeTag;
+var GetMessageGroupDetailsXML = openTag + '<GetMessageGroupDetails>\n<MESSAGE_GROUP_ID>59294</MESSAGE_GROUP_ID>\n</GetMessageGroupDetails>' + closeTag;
+
+var WebTrackingDataExportXML = openTag + '<WebTrackingDataExport>\n<EVENT_DATE_START>12/01/2009 00:00:00</EVENT_DATE_START>\n<EVENT_DATE_END>12/02/2009 23:59:00</EVENT_DATE_END>\n<DATABASE_ID>123456</DATABASE_ID>\n<DOMAINS>\n<DOMAIN_ID>122412</DOMAIN_ID>\n<DOMAIN_ID>234523</DOMAIN_ID>\n</DOMAINS>\n<SITES>\n<SITE_ID>2389423</SITE_ID>\n</SITES>\n<MOVE_TO_FTP/>\n<EXPORT_FORMAT>0</EXPORT_FORMAT>\n<EMAIL>admin@yourorg.com</EMAIL>\n<ALL_EVENT_TYPES/>\n<COLUMNS>\n<COLUMN>\n<NAME>CustomerID</NAME>\n</COLUMN>\n<COLUMN>\n<NAME>Address</NAME>\n</COLUMN>\n</COLUMNS>\n</WebTrackingDataExport>' + closeTag;
+
+var GetContactMailingDetailsXML = openTag + '<GetContactMailingDetails>\n<SURE_FROM_CODE>1-8QhP4YIS-XYPxqdpK-ia6t4PP3-+/dKSxVg-uCXkKZka-X77SLMfa-0J+R5TBj-AX3N0CTU</SURE_FROM_CODE>\n<ORGANIZATION_ID>1dcd49d-108b594203d-f528764d624db129b32c21fbca0cb8d6</ORGANIZATION_ID>\n</GetContactMailingDetails>' + closeTag;
+
+var GetFolderPathXML = openTag + '<GetFolderPath>\n<OBJECT_TYPE>Data</OBJECT_TYPE>\n<OBJECT_ID>87456</OBJECT_ID>\n</GetFolderPath>' + closeTag;
+
+var PurgeDataXML = openTag + '<PurgeData>\n<TARGET_ID>87981</TARGET_ID>\n<SOURCE_ID>64987</SOURCE_ID>\n</PurgeData>' + closeTag;
+
+var SetColumnValueXML = openTag + '<SetColumnValue>\n<LIST_ID>140146</LIST_ID>\n<COLUMN_NAME>State</COLUMN_NAME>\n<COLUMN_VALUE>GA</COLUMN_VALUE>\n<ACTION>1</ACTION>\n<EMAIL>somebody@domain.com</EMAIL>\n</SetColumnValue>' + closeTag;
+
+var GetScoringModelsXML = openTag + '<GetScoringModels>\n</GetScoringModels>' + closeTag;
+
+var GetContactScoresXML = openTag + '<GetContactScores>\n<CONTACT_ID>140146</CONTACT_ID>\n</GetContactScores>' + closeTag;
+
+var WriteYourOwnXML = openTag + '' + closeTag;
+
+function submitform() {
+	var inputForm = document.inputForm;
+	var hostname = inputForm.host[inputForm.host.selectedIndex].value;
+
+	var sessionId = inputForm.jsessionid.value;
+	var formToSubmit = document.sessionForm;
+    var sessionStr = '';
+
+	if (sessionId != '') {
+	 // you want a session?
+		sessionStr = ";jsessionid=" +sessionId;
+	}
+
+	formToSubmit.xml.value = inputForm.xml.value;
+	formToSubmit.action = 'http://' + hostname + '/XMLAPI' + sessionStr;
+	formToSubmit.submit();
+}
+
+function changeXML() {
+  var selectedInterface = document.inputForm.XMLInterface[document.inputForm.XMLInterface.selectedIndex].value;
+        
+  switch(selectedInterface) {
+    case '1':
+      document.inputForm.xml.value = loginXML;
+      document.inputForm.servlet.value = "XMLAPI";
+      functype = "user"; 
+      break;
+    case '2':
+      document.inputForm.xml.value = addRecipientXML;
+      document.inputForm.servlet.value = "XMLAPI";
+      functype = "recip"; 
+      break;
+    case '3':
+      document.inputForm.xml.value = SelectRecipientDataXML;
+      document.inputForm.servlet.value = "XMLAPI";
+      functype = "recip"; 
+      break;
+    case '4':
+      document.inputForm.xml.value = UpdateRecipientXML;
+      document.inputForm.servlet.value = "XMLAPI";
+      functype = "recip";       
+      break;
+    case '5':
+      document.inputForm.xml.value = sendMailingXML;
+      document.inputForm.servlet.value = "XMLAPI";
+      functype = "user";
+      break;
+    case '6':
+      document.inputForm.xml.value = ForwardToFriendXML;
+      document.inputForm.servlet.value = "XMLAPI";
+      functype = "user";
+      break;
+    case '7':
+      document.inputForm.xml.value = RecipientMailingXML;
+      document.inputForm.servlet.value = "XMLAPI";
+      functype = "user";
+      break;
+    case '8':
+      document.inputForm.xml.value = listImportXML;
+      document.inputForm.servlet.value = "XMLAPI";
+      functype = "user";
+      break;
+    case '9':
+      document.inputForm.xml.value = listExportXML;
+      document.inputForm.servlet.value = "XMLAPI";
+      functype = "user";
+      break;
+    case '10':
+      document.inputForm.xml.value = jobStatusXML;
+      document.inputForm.servlet.value = "XMLAPI";
+      functype = "user";
+      break;
+    case '11':
+      document.inputForm.xml.value = DeleteJobXML;
+      document.inputForm.servlet.value = "XMLAPI";
+      functype = "user";
+      break;
+    case '12':
+      document.inputForm.xml.value = RemoveRecipientXML;
+      document.inputForm.servlet.value = "XMLAPI";
+      functype = "user";
+      break;
+    case '13':
+      document.inputForm.xml.value = logoutXML;
+      document.inputForm.servlet.value = "XMLAPI";
+      functype = "user";
+      break;
+    case '14':
+      document.inputForm.xml.value = OptOutRecipientXML;
+      document.inputForm.servlet.value = "XMLAPI";
+      functype = "recip";
+      break;
+
+	case '15':
+      document.inputForm.xml.value = TrackingMetricExportXML;
+      document.inputForm.servlet.value = "XMLAPI";
+      functype = "user";
+      break;
+    case '16':
+      document.inputForm.xml.value = ScheduleMailingXML;
+      document.inputForm.servlet.value = "XMLAPI";
+      functype = "user";
+      break;
+    case '17':
+      document.inputForm.xml.value = GetListMetaDataXML;
+      document.inputForm.servlet.value = "XMLAPI";
+      functype = "user";
+      break;
+
+    case '18':
+      document.inputForm.xml.value = GetReportIdByDateXML;
+      document.inputForm.servlet.value = "XMLAPI";
+      functype = "user";
+      break;
+    case '19':
+      document.inputForm.xml.value = GetSentMailingsForOrgXML;
+      document.inputForm.servlet.value = "XMLAPI";
+      functype = "user";
+      break;
+    case '20':
+      document.inputForm.xml.value = GetSentMailingsForUserXML;
+      document.inputForm.servlet.value = "XMLAPI";
+      functype = "user";
+      break;
+    case '21':
+      document.inputForm.xml.value = GetAggregateTrackingForMailingXML;
+      document.inputForm.servlet.value = "XMLAPI";
+      functype = "user";
+      break;
+    case '22':
+      document.inputForm.xml.value = GetAggregateTrackingForOrgXML;
+      document.inputForm.servlet.value = "XMLAPI";
+      functype = "user";
+      break;
+    case '23':
+      document.inputForm.xml.value = GetAggregateTrackingForUserXML;
+      document.inputForm.servlet.value = "XMLAPI";
+      functype = "user";
+      break;
+
+    case '24':
+      document.inputForm.xml.value = ImportRecipientFieldDataXML;
+      document.inputForm.servlet.value = "XMLAPI";
+      functype = "user";
+      break;
+
+	case '99':
+      document.inputForm.xml.value = WriteYourOwnXML;
+      functype = "recip";
+      document.inputForm.host.value = "";
+      document.inputForm.servlet.value = "";
+      break;
+	  
+      case '711':
+      document.inputForm.xml.value = DoubleOptInRecipientXML;
+      document.inputForm.servlet.value = "XMLAPI";
+      functype = "recip";
+      break;
+
+    case '712':
+      document.inputForm.xml.value = GetSentMailingsForListXML;
+      document.inputForm.servlet.value = "XMLAPI";
+      functype = "user";
+      break;
+
+    case '713':
+      document.inputForm.xml.value = GetListsXML;
+      document.inputForm.servlet.value = "XMLAPI";
+      functype = "user";
+      break;
+
+    case '714':
+      document.inputForm.xml.value = ImportTableXML;
+      document.inputForm.servlet.value = "XMLAPI";
+      functype = "user";
+      break;
+
+    case '715':
+      document.inputForm.xml.value = JoinTableXML;
+      document.inputForm.servlet.value = "XMLAPI";
+      functype = "user";
+      break;
+
+    case '716':
+      document.inputForm.xml.value = ExportTableXML;
+      document.inputForm.servlet.value = "XMLAPI";
+      functype = "user";
+      break;
+
+    case '717':
+      document.inputForm.xml.value = DeleteTableXML;
+      document.inputForm.servlet.value = "XMLAPI";
+      functype = "user";
+      break;
+
+    case '718':
+      document.inputForm.xml.value = CreateQueryXML;
+      document.inputForm.servlet.value = "XMLAPI";
+      functype = "user";
+      break;
+
+	case '719':
+      document.inputForm.xml.value = RawRecipientDataExportXML;
+      document.inputForm.servlet.value = "XMLAPI";
+      functype = "user";
+      break;
+
+    case '800':
+	      document.inputForm.xml.value = AddDCRulesetXML;
+      document.inputForm.servlet.value = "XMLAPI";
+      functype = "user";
+      break;
+    case '801':
+	      document.inputForm.xml.value = DeleteDCRulesetXML;
+      document.inputForm.servlet.value = "XMLAPI";
+      functype = "user";
+      break;
+    case '802':
+	      document.inputForm.xml.value = ExportDCRulesetXML;
+      document.inputForm.servlet.value = "XMLAPI";
+      functype = "user";
+      break;
+    case '803':
+	      document.inputForm.xml.value = GetDCRulesetXML;
+      document.inputForm.servlet.value = "XMLAPI";
+      functype = "user";
+      break;
+    case '804':
+	      document.inputForm.xml.value = ImportDCRulesetXML;
+      document.inputForm.servlet.value = "XMLAPI";
+      functype = "user";
+      break;
+    case '805':
+	      document.inputForm.xml.value = ListDCRulesetsForMailingXML;
+      document.inputForm.servlet.value = "XMLAPI";
+      functype = "user";
+      break;
+    case '808':
+	      document.inputForm.xml.value = ReplaceDCRulesetXML;
+      document.inputForm.servlet.value = "XMLAPI";
+      functype = "user";
+      break;
+    case '809':
+	      document.inputForm.xml.value = ValidateDCRulesetXML;
+      document.inputForm.servlet.value = "XMLAPI";
+      functype = "user";
+      break;
+    case '810':
+	      document.inputForm.xml.value = GetMailingTemplatesXML;
+      document.inputForm.servlet.value = "XMLAPI";
+      functype = "user";
+      break;
+	case '811':
+	  document.inputForm.xml.value = ExportMailingTemplateXML;
+      document.inputForm.servlet.value = "XMLAPI";
+      functype = "user";
+      break;
+	case '812':
+	  document.inputForm.xml.value = CalculateQueryXML;
+      document.inputForm.servlet.value = "XMLAPI";
+      functype = "user";
+      break;
+	case '813':
+	  document.inputForm.xml.value = PurgeTableXML;
+      document.inputForm.servlet.value = "XMLAPI";
+      functype = "user";
+      break;
+	case '814':
+	  document.inputForm.xml.value = PreviewMailingXML;
+      document.inputForm.servlet.value = "XMLAPI";
+      functype = "user";
+      break;
+	case '815':
+	  document.inputForm.xml.value = AddContactToProgramXML;
+      document.inputForm.servlet.value = "XMLAPI";
+      functype = "user";
+      break;
+	case '816':
+	  document.inputForm.xml.value = CreateContactListXML;
+      document.inputForm.servlet.value = "XMLAPI";
+      functype = "user";
+      break;	
+	case '817':
+	  document.inputForm.xml.value = AddContactToContactListXML;
+      document.inputForm.servlet.value = "XMLAPI";
+      functype = "user";
+      break;
+	case '818':
+	  document.inputForm.xml.value = CreateTableXML;
+      document.inputForm.servlet.value = "XMLAPI";
+      functype = "user";
+      break;
+	case '819':
+	  document.inputForm.xml.value = InsertUpdateRelationalTableXML;
+      document.inputForm.servlet.value = "XMLAPI";
+      functype = "user";
+      break;
+	case '820':
+	  document.inputForm.xml.value = DeleteRelationalTableDataXML;
+      document.inputForm.servlet.value = "XMLAPI";
+      functype = "user";
+      break;
+	case '821':
+	  document.inputForm.xml.value = AddListColumnXML;
+      document.inputForm.servlet.value = "XMLAPI";
+      functype = "user";
+      break;
+    case '500':
+      document.inputForm.xml.value = GetMessageGroupDetailsXML;
+      document.inputForm.servlet.value = "XMLAPI";
+      functype = "user";
+      break; 
+    case '501':
+      document.inputForm.xml.value = WebTrackingDataExportXML;
+      document.inputForm.servlet.value = "XMLAPI";
+      functype = "user";
+      break; 	  
+    case '502':
+      document.inputForm.xml.value = GetContactMailingDetailsXML;
+      document.inputForm.servlet.value = "XMLAPI";
+      functype = "user";
+      break; 
+    case '822':
+      document.inputForm.xml.value = GetFolderPathXML;
+      document.inputForm.servlet.value = "XMLAPI";
+      functype = "user";
+      break; 
+    case '823':
+      document.inputForm.xml.value = PurgeDataXML;
+      document.inputForm.servlet.value = "XMLAPI";
+      functype = "user";
+      break; 
+    case '824':
+      document.inputForm.xml.value = SetColumnValueXML;
+      document.inputForm.servlet.value = "XMLAPI";
+      functype = "user";
+      break; 
+    case '503':
+      document.inputForm.xml.value = GetContactScoresXML;
+      document.inputForm.servlet.value = "XMLAPI";
+      functype = "user";
+      break;
+    case '504':
+      document.inputForm.xml.value = GetScoringModelsXML;
+      document.inputForm.servlet.value = "XMLAPI";
+      functype = "user";
+      break;
+
+    default:
+      break;
+  }
+}
+</script>
+
+</head>
+<body>
+
+<script>
+if(document.location == top.location) 
+{ alert("This is a sub frame of the Test Harness.  Click OK to properly start Test Harness");
+  document.location.href="Silverpop XML APIs - Test Harness.html";
+  }
+</script>
+
+<form name="inputForm" method="POST">
+<table width="569">
+<tr>
+
+<td width="107" align="right" bgcolor="#FFFFFF">
+
+</td>
+<td width="105">
+</td>
+
+<td width="366" rowspan="4"><font face="Arial">1. Pick an API<br>
+  2. Choose Host<br>
+  3. Enter jsessionid (if needed)<br>
+  4. Edit XML<br>
+  5. Submit</font>
+</td>
+</tr>
+<tr>
+<td width="107" align="right" bgcolor="#FFFFFF">
+  <p><span style="background-color: #FFFFFF"><font face="Arial">API:</font></span></p>
+</td>
+<td width="105"><select name="XMLInterface" onChange="changeXML()" size="1">
+
+<option value="0">Pick one
+<option value="815">AddContactToProgram
+<option value="817">AddContactToContactList
+<option value="800">AddDCRuleset
+<option value="821">AddListColumn
+<option value="2">AddRecipient
+<option value="816">CreateContactList
+<option value="812">CalculateQuery
+<option value="718">CreateQuery
+<option value="818">CreateTable
+<option value="801">DeleteDCRuleset
+<option value="11">DeleteJob
+<option value="820">DeleteRelationalTableData
+<option value="717">DeleteTable
+<option value="711">DoubleOptInRecipient
+<option value="802">ExportDCRuleset
+<option value="9">ExportList
+<option value="811">ExportMailing Template
+<option value="716">ExportTable
+<option value="6">ForwardToFriend
+<option value="21">GetAggregateTrackingForMailing
+<option value="22">GetAggregateTrackingForOrg
+<option value="23">GetAggregateTrackingForUser
+<option value='502'>GetContactMailingDetails
+<option value='503'>GetContactScores
+<option value="803">GetDCRuleset
+<option value="822">GetFolderPath
+<option value="10">GetJobStatus
+<option value="17">GetListMetaData
+<option value="713">GetLists
+<option value="810">GetMailingTemplates
+<option value='500'>GetMessageGroupDetails
+<option value="18">GetReportIDByDate
+<option value="712">GetSentMailingsForList
+<option value="19">GetSentMailingsForOrg
+<option value="20">GetSentMailingsForUser
+<option value='504'>GetScoringModels
+<option value="804">ImportDCRuleset
+<option value="8">ImportList
+<option value="714">ImportTable
+<option value="819">InsertUpdateRelationalTable
+<option value="715">JoinTable
+<option value="805">ListDCRulesetsForMailing
+<option value="7">ListRecipientMailings
+<option value="1">Login
+<option value="13">Logout
+<option value="14">OptOutRecipient
+<option value="814">PreviewMailing
+<option value="823">PurgeData
+<option value="813">PurgeTable
+<option value="719">RawRecipientDataExport
+<option value="12">RemoveRecipient
+<option value="808">ReplaceDCRuleset
+<option value="16">ScheduleMailing
+<option value="3">SelectRecipientData
+<option value="5">SendMailing
+<option value="824">SetColumnValue
+<option value="15">TrackingMetricExport
+<option value="4">UpdateRecipient
+<option value="809">ValidateDCRuleset
+<option value='501'>WebTrackingDataExport
+<option value="99">Write Your Own XML
+</select>
+</td>
+</tr>
+<tr>
+<td width="107" align="right" bgcolor="#FFFFFF">
+  <font face="Arial">Host:</font>
+</td>
+<td width="233">
+<select name="host">
+<option value="localhost:8088" selected="selcted">Local Dev on port 8088</option>
+<option value="api0.silverpop.com">Engage Pod 0</option>
+<option value="api1.silverpop.com">Engage Pod 1</option>
+<option value="api2.silverpop.com">Engage Pod 2</option>
+<option value="api3.silverpop.com">Engage Pod 3</option>
+<option value="api4.silverpop.com">Engage Pod 4</option>
+<option value="api5.silverpop.com">Engage Pod 5</option>
+<option value="api6.silverpop.com">Engage Pod 6</option>
+<option value="engage-qa1-api.adm01.com">QA 1</option>
+<option value="engage-qa2-api.adm01.com">QA 2</option>
+<option value="engage-qa3-api.adm01.com">QA 3</option>
+<option value="engage-qa4-api.adm01.com">QA 4</option>
+<option value="engage-qa5-api.adm01.com">QA 5</option>
+<option value="engage-qa6-api.adm01.com">QA 6</option>
+<option value="engage-qa1.adm01.com">QA 1-E</option>
+<option value="engage-qa2.adm01.com">QA 2-E</option>
+<option value="engage-qa3.adm01.com">QA 3-E</option>
+<option value="engage-qa4.adm01.com">QA 4-E</option>
+<option value="engage-qa5.adm01.com">QA 5-E</option>
+<option value="engage-qa6.adm01.com">QA 6-E</option>
+<option value="api.pilot.silverpop.com">Pilot</option>
+<option value="10.120.41.56:8151">Sonoa 1 Saavis</option>
+<option value="10.120.41.58:8151">Sonoa 2 Saavis</option>
+<option value="engage.atls1">Stage1 - LB</option>
+<option value="engage.atls4">Stage4 - LB</option>
+<option value="app01.atls4:8111">Stage4 - eapp01</option>
+<option value="app02.atls4:8111">Stage4 - eapp02</option>
+<option value="engage.atls5">Stage5 - LB</option>
+<option value="vapp17.atls5:8111">Stage5 - eapp01</option>
+<option value="vapp18.atls5:8111">Stage5 - eapp02</option>
+<option value="vdevint01.atld1">DevInt1</option>
+<option value="vdevint02.atld1">DevInt2</option>
+<option value="vdevint03.atld1">DevInt3</option>
+<option value="vdevint05.atld1">DevInt5</option>
+<option value="vdevint06.atld1">DevInt6</option>
+<option value="vdevint07.atld1">DevInt7</option>
+<option value="vdevint08.atld1">DevInt8</option>
+<option value="vdevint09.atld1">DevInt9</option>
+<option value="vdevint10.atld1">DevInt10</option>
+<option value="vdevint11.atld1">DevInt11</option>
+<option value="vdevint12.atld1">DevInt12</option>
+<option value="vdevint13.atld1">DevInt13</option>
+<option value="vdevint14.atld1">DevInt14</option>
+<option value="xmlapi.devload.atlnp1">DevLoad LB</option>
+<option value="app01.atlnp1:8111">DevLoad node1</option>
+<option value="app02.atlnp1:8111">DevLoad node2</option>
+<option value="engage-qaload-api.adm01.com">QALoad LB</option>
+<option value="vapp11.atlload:11802">QALoad node1</option>
+<option value="vapp12.atlload:11802">QALoad node2</option>
+<option value="wdc01np-engage-qaload1-rapp01.adm01.com:11802">QALoad2 node1</option>
+<option value="wdc01np-engage-qaload1-rapp02.adm01.com:11802">QALoad2 node2</option>
+<option value="engage-qaload2-api.adm01.com">QALoad2 LB</option>
+<option value="mapp11.atlp1:8111">App Server - mapp11.atlp1</option>
+<option value="mapp12.atlp1:8111">App Server - mapp12.atlp1</option>
+<option value="mapp13.atlp1:8111">App Server - mapp13.atlp1</option>
+<option value="mapp11.atlp2:8111">App Server - mapp11.atlp2</option>
+<option value="mapp12.atlp2:8111">App Server - mapp12.atlp2</option>
+<option value="mapp13.atlp2:8111">App Server - mapp13.atlp2</option>
+<option value="rapp17.atlis1:8111">App Server - mapp01.atlp3 (pod5)</option>
+<option value="rapp18.atlis1:8111">App Server - mapp02.atlp3 (pod5)</option>
+<option value="rapp19.atlis1:8111">App Server - mapp03.atlp3 (pod5)</option>
+<option value="mapp01.pdkp1:8111">App Server - mapp01.pdkp1</option>
+<option value="mapp02.pdkp1:8111">App Server - mapp02.pdkp1</option>
+<option value="mapp03.pdkp1:8111">App Server - mapp03.pdkp1</option>
+<option value="mapp01.pdkp2:8111">App Server - mapp01.pdkp2</option>
+<option value="mapp02.pdkp2:8111">App Server - mapp02.pdkp2</option>
+<option value="mapp03.pdkp2:8111">App Server - mapp03.pdkp2</option>
+<option value="vsnm01d.atlnp1:8151">Sonoa Mapp1 Node 1</option>
+<option value="vsnm01d.atlnp1:8151/servlet">Sonoa Mapp1 Node 1 servlet</option>
+<option value="vsnm02d.atlnp1:8151">Sonoa Mapp1 Node 2</option>
+<option value="vsnm01d.atlnp1:8181">Sonoa Mapp4 Node 1</option>
+<option value="vsnm02d.atlnp1:8181">Sonoa Mapp4 Node 2</option>
+<option value="10.150.41.56:8131">Sonoa01.pdkis1</option>
+<option value="api3.silverpop.com">Sonoa Pod 3 (api3.silverpop.com)</option>
+<option value="sonoa01d.pdkis1:8131">sonoa01.pdkis1</option>
+<option value="api1.silverpop.com/servlet">Pod 1 Servlet Test</option>
+<option value="api2.silverpop.com/servlet">Pod 2 Servlet Test</option>
+<option value="api1.sandbox.atlnp1">Sandbox 1</option>
+<option value="api5.sandbox.atlnp1">Sandbox 5</option>
+<option value="xmlapi.archload.atlnp1">ARCHLOAD</option>
+</select></td>
+</tr>
+
+<tr>
+<td width="107" align="right"><font face="Arial">jsessionid:</font></td>
+<td width="280"><input type="text" name="jsessionid" value="" size="25"></td>
+<td width="197">
+<input type="button" value="submit xml request" onClick="submitform();">
+</td>
+</tr>
+
+
+<tr>
+<td width="107" align="right" valign="top"><font face="Arial">XML:</font></td>
+<td colspan="2" width="477"><textarea rows=18 cols=57 name="xml">
+<?xml version="1.0"?><Envelope><Body>
+</Body></Envelope></textarea></td>
+</tr>
+</table>
+&nbsp;
+</form>
+ 
+<form name="sessionForm" method="POST">
+<input type="hidden" name="jsessionid">
+<input type="hidden" name="xml">
+</form>
+<form name="noSessionForm" method="POST">
+<input type="hidden" name="xml">
+
+</form>
+</Body>
+</html>
